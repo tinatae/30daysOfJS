@@ -37,28 +37,86 @@
     
     // Array.prototype.filter()
     // 1. Filter the list of inventors for those who were born in the 1500's
+      // const fifteen = inventors.filter(function(inventor) {
+      //   if (inventor.year >= 1500 && inventor.year < 1600) {
+      //     return true
+      //   }                     // NOTE: NO NEED TO return false. WILL JUST TRASH IT
+      // })  
+
+      // console.log(fifteen)
+
+      const fifteen = inventors.filter(inventor => (inventor.year >= 1500 && inventor.year < 1600))  
+      // REFACTORED TO REMOVE function() THEN REDUCED TO LOGIC WHERE WILL RETURN IF BOTH BOOLEANS === true
+
+      console.table(fifteen)  
 
     // Array.prototype.map()
     // 2. Give us an array of the inventors first and last names
+        const firstAndLast = inventors.map(inventor => (`${inventor.first} ${inventor.last}`))
+        console.log(firstAndLast)
 
     // Array.prototype.sort()
     // 3. Sort the inventors by birthdate, oldest to youngest
+        // .sort() TAKES 2 ITEMS & COMPARE BIGGER OR SMALLER & RETURNS 1 OR -1
+
+        const sorted = inventors.sort((a, b) => (a.year > b.year ? (1) : (-1)))
+
+        console.table(sorted)
 
     // Array.prototype.reduce()
     // 4. How many years did all the inventors live all together?
 
+        const sumYears = inventors.reduce((sum, inventor) => {
+          return sum + inventor.passed - inventor.year
+        }, 0)                                                 // START WITH sum = 0 AS FIRST VALUE
+
+        console.log(sumYears)
+
     // 5. Sort the inventors by years lived
+
+        const oldestToYoungest = inventors.sort((a, b) => {
+          const first = a.passed - a.year;
+          const next = b.passed - b.year;
+          return first > next ? (-1) : (1)
+        
+        })
+
+        console.table(oldestToYoungest)
 
     // 6. create a list of Boulevards in Paris that contain 'de' anywhere in the name
     // https://en.wikipedia.org/wiki/Category:Boulevards_in_Paris
-
+        // const category = document.querySelector('.mw-category');
+        // const links = [...category.querySelectorAll('a')]   // CAN CALL querySelectorAll ON ANY EXISTING DOM ELEMENT NOT JUST document
+        // // const links = Array.from(category.querySelectorAll('a')) IS ANOTHER WAY TO WRITE
+        
+        // const de = links
+        //   .map(link => link.textContent)
+        //   .filter(streetName => streetName.includes('de'))
 
     // 7. sort Exercise
     // Sort the people alphabetically by last name
 
+        const alpha = people.sort((lastOne, nextOne) => {
+          const [aLast, aFirst] = lastOne.split(", ")           // DESTRUCTURING ARRAY
+          const [bLast, bFirst] = nextOne.split(", ")
+          return aLast > bLast ? (1) : (-1)                     // NOTE THAT EVEN THOUGH DESTRUCTURED, HOLDING ONTO WHOLE STRING
+        })                                                      // IF WANT TO RETURN ARRAY OR OBJECT, USE .reduce()
+
+        console.table(alpha)
+
     // 8. Reduce Exercise
     // Sum up the instances of each of these
-    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+    const data = ['car', 'car', 'truck', 'truck', 'bike', 'walk', 'car', 'scoot', 'van', 'bike', 'walk', 'car', 'van', 'car', 'truck' ];
+        
+    const transportation = data.reduce(function(obj, item) {
+      if (!obj[item]) {
+        obj[item] = 0
+      } 
+        obj[item]++;
+        return obj 
+    }, {})
+
+    console.log(transportation)
 
   </script>
 </body>
