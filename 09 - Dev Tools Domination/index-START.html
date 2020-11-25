@@ -17,29 +17,102 @@
       p.style.fontSize = '50px';
     }
 
+    // IF WANT TO FIND JS THAT MAKES p TAG TURN GREEN. GO TO DEV TOOLS > INSPECT ELEMENT > RIGHT CLICK 'Break On' > CLICK 'attribute modifications'
+    // WILL ADD A DEBUGGER & PAUSE IN CODE WHERE THE ATTRIBUTE TURNS GREEN.
+    // IF WANT TO REMOVE DEBUGGER, GO BACK TO DEV TOOLS & UNCLICK 'attribute modifications'
+
     // Regular
+      console.log("hello")
 
     // Interpolated
+      // TWO WAYS:
 
-    // Styled
+      console.log("hello, I am a %s string!", "happy")
+
+      // ES6 BACKTICKS PROBABLY MORE CURRENT
+      const bloop = "happy"
+      console.log(`hello I am a ${bloop} string`)
+
+    // Styled   
+      console.log("%c I am a bold statement", 'font-weight: 800; font-size: 50px; background: yellow; text-shadow: 10px 10px 0 blue;')
 
     // warning!
+      console.warn("uh-oh") // INCLUDES STACK TRACE TO WHERE WARNING IS CALLED
 
     // Error :|
-
+      console.error("seriously, big oops")  // INCLUDES STACK TRACE TO ERROR
+                                            // IF HAVE COUPLE FUNCTIONS CALLING TO THAT POINT, WILL INCLUDE ENTIRE STACK TRACE
     // Info
+      console.info("crocodiles eat 3-4 people per year")  // PREVIOUS VERSION HAD info TAG?
 
     // Testing
+      console.assert(1 === 1, "nope!")    // RETURNS NOTHING. ONLY RETURNS IF IT FAILS
+      console.assert(1 === 2, "nope!")    // RETURNS 'Assertion failed: nope!'
 
+      const p = document.querySelector('p')
+      console.assert(p.classList.contains('ouch'), 'nice try')  // IF CLASSLIST DOES NOT INCLUDE, WILL RETURN 'Assertion failed: nice try'
+                                          // IF DOES INCLUDE, WILL RETURN NOTHING. SO DON'T NEED TO CREATE 'if' STATEMENT
     // clearing
+      console.clear()                     // LOL. 'PUT AT BOTTOM OF FILE TO MESS WITH DEVELOPER'
 
     // Viewing DOM Elements
+      console.log(p)                      // WILL SHOW ELEMENT
+      console.dir(p)                      // WILL SHOW ALL AVAILABLE METHODS (IN PROTOTYPE) & PROPERTIES OF ELEMENT
 
     // Grouping together
+      dogs.forEach(dog => {
+        // console.group(`${dog.name}`);
+        console.groupCollapsed(`${dog.name}`)         // WILL RETURN GROUPED BUT COLLAPSED
+        console.log(`This is ${dog.name}`);
+        console.log(`${dog.name} is ${dog.age} years old`);
+        console.log(`${dog.name} is ${dog.age * 7} dog years old`);
+        console.groupEnd(`${dog.name}`)                        // PASS SAME STRING THAT USED TO DEFINE GROUP INTO groupEnd()
+      })
+
+      // RETURNS GROUPED:
+        // Snickers
+        //   This is Snickers
+        //   Snickers is 2 years old
+        //   Snickers is 14 dog years old
+
+        // hugo
+        //   This is hugo
+        //   hugo is 8 years old
+        //   hugo is 56 dog years old
+
+      // INSTEAD OF:
+        //   This is Snickers
+        //   Snickers is 2 years old
+        //   Snickers is 14 dog years old
+        //   This is hugo
+        //   hugo is 8 years old
+        //   hugo is 56 dog years old
 
     // counting
+      // WILL COUNT HOWEVER MANY TIMES USE SPECIFIC WORD/NUMBER/OBJECT/DOM NODE, ETC.
+    
+                                // LOGS IN REAL TIME HOW MANY HAVE COUNTED
+      console.count("Hi")       // RETURNS Hi: 1
+      console.count("Bye")      // RETURNS Bye: 1
+      console.count("Hi")       // RETURNS Hi: 2
+      console.count("Bye")      // RETURNS Bye: 2
+      console.count("Bye")      // RETURNS Bye: 3
+      console.count("Bye")      // RETURNS Bye: 4
+      console.count("Hi")       // RETURNS Hi: 3
 
     // timing
+      // THERE'S ALSO performance.now FYI
+
+      console.time('fetch site');
+      fetch('https://api.github.com/users/tinatae')
+      .then(data => data.json())
+      .then(data => {
+        console.timeEnd('fetch site');  // PASS SAME STRING USED TO DEFINE THIS
+        console.log(data)               // RETURNS 'fetch site: 18.02 ms'
+      })
+
+    // console.table
+      console.table(dogs)
 
   </script>
 </body>
