@@ -96,6 +96,30 @@
   </div>
 
 <script>
+  const checkboxes = document.querySelectorAll('.inbox input[type="checkbox"]');
+
+  let lastChecked;  // let STATEMENT BC WILL BE CONSTANTLY REASSIGNED
+
+  function handleCheck(e) {
+    let inBetween = false;
+
+    // CHECK IF HAD Shift KEY DOWN && CHECK THEY ARE CHECKING IT (OPPOSED TO UN-CHECKING IT)
+    if (e.shiftKey && this.checked) {
+      checkboxes.forEach(checkbox => {
+        console.log(checkbox);
+        if (checkbox === this || checkbox === lastChecked) {      // this IS FIRST CHECKED BOX; lastChecked IS IF CLICK BOTTOM CHECKBOX FIRST. SO TOP-BOTTOM OR BOTTOM-TOP LOGIC IS SAME
+          inBetween = !inBetween;
+        }
+
+        if (inBetween) {
+          checkbox.checked = true;
+        }
+      })
+    }
+    lastChecked = this;
+  }
+   
+  checkboxes.forEach(checkbox => checkbox.addEventListener('click', handleCheck))
 </script>
 </body>
 </html>
