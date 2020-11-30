@@ -43,7 +43,7 @@
   </div>
 
   <script>
-    function debounce(func, wait = 20, immediate = true) {
+    function debounce(func, wait = 20, immediate = true) {  // NOTE THERE'S A debouce IN lodash, FUNCTIONS ALL OVER THE PLACE. THIS IS JUST FROM INTERNET (BC FRAMEWORK-FREE). 20 ms IN THIS CASE. ALWAYS CONSIDER FOR SCROLL, ETC.
       var timeout;
       return function() {
         var context = this, args = arguments;
@@ -58,6 +58,33 @@
       };
     }
 
+    const sliderImages = document.querySelectorAll('.slide-in');
+
+    function checkSlide() {
+      // console.count(e)    
+      // console.log(window.scrollY)           // TELLS HOW MANY PIXELS (AT VERY TOP OF BROWSER) SCROLLED DOWN 
+      sliderImages.forEach(sliderImage => {
+        const slideInAt = (window.scrollY + window.innerHeight) - sliderImage.height / 2;       // GIVES PIXEL LEVEL AT VERY BOTTOM OF WINDOW (VIEWPORT)
+                                                                                                // IF DON'T DIVIDE BY 2, MEANS PIC WILL COME IN AFTER HAVE SCROLLED THROUGH BOTTOM OF IMAGE
+        console.log(slideInAt)
+        // IF WANT TO SCROLL FROM BOTTOM->UP
+        const imageBottom = sliderImage.offsetTop + sliderImage.height   // .offSetTop() TELLS TOP OF IMAGE IS HOW FAR FROM TOP OF WINDOW
+                                                                          // imageBottom TELLS PIXEL LEVEL OF BOTTOM OF IMAGE
+
+        const isHalfShown = slideInAt > sliderImage.offsetTop;
+        const isNotScrolledPast = window.scrollY < imageBottom;           // IMPORTANT TO CHECK IF HAVE SCROLLED/NOT SCROLLED PAST IMAGE 
+
+        if (isHalfShown && isNotScrolledPast) {
+          sliderImage.classList.add('active')
+        } else {
+          sliderImage.classList.remove('active')
+        }
+      })        
+                                  
+    }
+
+    // window.addEventListener('scroll', checkSlide);         // ANYTIME window IS SCROLLED, RUN FUNCTION
+    window.addEventListener('scroll', debounce(checkSlide));  // HOWEVER, COULD BE PERFORMANCE ISSUE BC POTENTIALLY RUN HUNDREDS OF TIMES WITH A FLICK OF THE MOUSE. HENCE debounce()
   </script>
 
   <style>
@@ -105,11 +132,11 @@
     }
 
     .align-left.slide-in {
-      transform: translateX(-30%) scale(0.95);
+      transform: translateX(-30%) scale(0.95);      /* GOES FROM OFFSCREEN & SLIGHTLY SMALLER */
     }
     
     .align-right.slide-in {
-      transform: translateX(30%) scale(0.95);
+      transform: translateX(30%) scale(0.95);       /* TO ONSCREEN & FULL SIZE */
     }
 
     .slide-in.active {

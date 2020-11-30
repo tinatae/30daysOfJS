@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <script src="https://kit.fontawesome.com/535114959b.js" crossorigin="anonymous"></script>
+    <title>Hovering Stars</title>
+</head>
+
+<body>
+    <style>
+        .fa-star {
+            color: grey;
+        }
+
+        .fa-star:hover {
+            cursor: pointer;
+        }
+ 
+    </style>
+
+    <div className="changing-stars">
+        <div id="hover-stars">
+            <i class="fas fa-star form-star" onmouseover={changeStar(1)} onmouseout={changeBack()} onClick={updateStar(1)}></i>
+            <i class="fas fa-star form-star" onmouseover={changeStar(2)} onmouseout={changeBack()} onClick={updateStar(2)}></i>
+            <i class="fas fa-star form-star" onmouseover={changeStar(3)} onmouseout={changeBack()} onClick={updateStar(3)}></i>
+            <i class="fas fa-star form-star" onmouseover={changeStar(4)} onmouseout={changeBack()} onClick={updateStar(4)}></i>
+            <i class="fas fa-star form-star" onmouseover={changeStar(5)} onmouseout={changeBack()} onClick={updateStar(5)}></i>
+        </div>
+    </div>
+
+
+    <script>
+        let userClicked = false;
+
+        function updateStar(num) {
+            userClicked = true;
+
+            if (num === 5) {
+                allStars.forEach(star => star.style.color = "blue")
+            } else {
+                for (let i = 1; i <= num; i++) {
+                    allStars[i-1].style.color = "blue"
+                }
+                for (let j = num+1; j <= 5; j++) {
+                    allStars[j-1].style.color = "grey"
+                }
+            }
+            console.log(num)
+        }
+
+        const allStars = document.querySelectorAll(".form-star")
+
+        function changeStar(num) {
+            if (!userClicked) {
+                for (let i = 1; i <= num; i++) {
+                    allStars[i - 1].style.color = "red"
+                }
+            }  
+        }
+
+        function changeBack() {
+            if (!userClicked) {
+                allStars.forEach(star=> star.style.color = "grey")
+            }
+        }
+
+
+
+    </script>
+</body>
+
+</html>
