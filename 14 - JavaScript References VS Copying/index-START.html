@@ -9,14 +9,33 @@
   <script>
     // start with strings, numbers and booleans
 
+      // NUMBERS
+        let age = 100;
+        let age2 = age;
+        console.log(age, age2);   // 100, 100
+        age = 200;
+        console.log(age, age2)    // 200, 100
+
+      // SAME EXAMPLE FOR STRINGS
+        let name = "Peanut";
+        let name2 = name;
+        console.log(name, name2)  // Peanut, Peanut
+        name = "Butter";
+        console.log(name, name2)  // Butter, Peanut
+
     // Let's say we have an array
-    const players = ['Wes', 'Sarah', 'Ryan', 'Poppy'];
+      const players = ['Poppy', 'Peanut', 'Pickle', 'Popcorn'];
 
     // and we want to make a copy of it.
-
     // You might think we can just do something like this:
 
+      const team = players;
+      console.log(players, team)
+
     // however what happens when we update that array?
+
+      team[3] = "Radish"
+      console.log(players, team)    // UPDATES BOTH BC GOES BACK TO REFERENCE (WILL REFERENCE BACK
 
     // now here is the problem!
 
@@ -27,30 +46,68 @@
     // So, how do we fix this? We take a copy instead!
 
     // one way
+    const team2 = players.slice(); // IF PASS NOTHING WILL RETURN COPY
+    team2[3] = "Carrot"
 
     // or create a new array and concat the old one in
+    const team3 = [].concat(players);
 
     // or use the new ES6 Spread
+    const team4 = [...players]
+
+    const team5 = Array.from(players)
 
     // now when we update it, the original one isn't changed
+
 
     // The same thing goes for objects, let's say we have a person object
 
     // with Objects
     const person = {
-      name: 'Wes Bos',
-      age: 80
+      name: 'Willy Wonka',
+      age: 100
     };
 
     // and think we make a copy:
+    const character = person;
+    character.number= 99;
+    console.log(character)
 
     // how do we take a copy instead?
+    const cap2 = Object.assign({}, person, {number:99, age: 12})
+    console.log(cap2);
 
-    // We will hopefully soon see the object ...spread
+    // We will hopefully soon see the object ...spread (CUU)
+    const cap3 = {...person}
+
 
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
+    const flower = {
+      name: 'Sunny', 
+      age: 10,
+      social: {
+        twitter: '@sunnyflower',
+        facebook: 'sunny.flower'
+      }
+    };
+
+    const sunflower = Object.assign({}, flower)
+    sunflower.age = 12;                             // THIS CHANGES FINE BC CLONES ONE LEVEL DEEP
+    sunflower.social.twitter = '@rose'              // THIS CHANGES BOTH BC DEEP CLONE
+    console.log(flower, sunflower)
+
+    const flower2 = JSON.parse(JSON.stringify(flower))  // 'POOR MAN'S' DEEP CLONE. SHAKES ALL THE REFERENCES & TURNS INTO STRING. THEN PARSES TO RETURN AS OBJECT
+    flower2.social.facebook = 'copycat';
+    console.log(flower2, flower)                        // ONLY flower2 facebook CHANGED
+
+
+    
+
+    // IF WANT TO CLONE DEEP, GO ONLINE & FIND FUNCTION 'clonedeep' THAT WILL CLONE AS DEEP AS WANT.
+    // HOWEVER VERY RARELY NEED TO CLONE OBJECT THAT DEEP SO RECONSIDER OTHER OPTIONS
 
   </script>
 
 </body>
 </html>
+ 
