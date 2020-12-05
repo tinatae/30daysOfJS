@@ -35,27 +35,32 @@
     // however what happens when we update that array?
 
       team[3] = "Radish"
-      console.log(players, team)    // UPDATES BOTH BC GOES BACK TO REFERENCE (WILL REFERENCE BACK
 
-    // now here is the problem!
+      console.log(players, team)      // BOTH ARRAYS HAVE UPDATED 'Radish'
+                                      // BC team GOES BACK TO REFERENCE (WILL REFERENCE BACK)
 
-    // oh no - we have edited the original array too!
+    // We've edited the original array too because that is an array reference, not an array copy. They both point to the same array!
 
-    // Why? It's because that is an array reference, not an array copy. They both point to the same array!
-
-    // So, how do we fix this? We take a copy instead!
+    // We fix this by taking a copy
 
     // one way
-    const team2 = players.slice(); // IF PASS NOTHING WILL RETURN COPY
-    team2[3] = "Carrot"
+      const team2 = players.slice(); // IF PASS NOTHING WILL RETURN COPY
+      team2[3] = "Carrot"
+      console.log(team, team2)
 
     // or create a new array and concat the old one in
-    const team3 = [].concat(players);
+      const team3 = [].concat(players);
+      team3[3] = "Tomato"
+      console.log(team3, players)
 
     // or use the new ES6 Spread
-    const team4 = [...players]
+      const team4 = [...players]
+      team4[3] = "Potato"
+      console.log(team4, players)
 
-    const team5 = Array.from(players)
+      const team5 = Array.from(players)
+      team5[3] = "Squash"
+      console.log(team5, players)
 
     // now when we update it, the original one isn't changed
 
@@ -71,14 +76,17 @@
     // and think we make a copy:
     const character = person;
     character.number= 99;
-    console.log(character)
+    console.log(character)      // BOTH person && character HAVE number ATTRIBUTE
 
     // how do we take a copy instead?
     const cap2 = Object.assign({}, person, {number:99, age: 12})
-    console.log(cap2);
+    cap2.age = 15
+    console.log(cap2, person);
 
-    // We will hopefully soon see the object ...spread (CUU)
+    // We will hopefully soon see the object ...spread (WORKS WITH React? NOT JS)
     const cap3 = {...person}
+    cap3.age = 50;
+    console.log(cap3, person)
 
 
     // Things to note - this is only 1 level deep - both for Arrays and Objects. lodash has a cloneDeep method, but you should think twice before using it.
@@ -100,8 +108,6 @@
     flower2.social.facebook = 'copycat';
     console.log(flower2, flower)                        // ONLY flower2 facebook CHANGED
 
-
-    
 
     // IF WANT TO CLONE DEEP, GO ONLINE & FIND FUNCTION 'clonedeep' THAT WILL CLONE AS DEEP AS WANT.
     // HOWEVER VERY RARELY NEED TO CLONE OBJECT THAT DEEP SO RECONSIDER OTHER OPTIONS

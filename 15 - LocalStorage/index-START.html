@@ -23,13 +23,92 @@
       <input type="text" name="item" placeholder="Item Name" required>
       <input type="submit" value="+ Add Item">
     </form>
+    <button id="clear-btn">Clear All</button>
+    <button id="select-all-btn">Select All</button>
+    <button id="unselect-all-btn">Unselect All</button>
   </div>
 
 <script>
   const addItems = document.querySelector('.add-items');
   const itemsList = document.querySelector('.plates');
-  const items = [];
+  const items = JSON.parse(localStorage.getItem('items')) || [];    // WILL TRY LOCAL STORAGE ON PAGE LOAD OR WILL FALL BACK TO EMPTY ARRAY
 
+  const clearButton = document.querySelector('#clear-btn')
+  const selectAllButton = document.querySelector('#select-all-btn')
+  const unselectAllButton = document.querySelector('#unselect-all-btn')
+
+  function addItem(e) {
+    e.preventDefault();                                             // PAGE RELOADS BC BY DEFAULT FORM WILL RELOAD
+    const text = this.querySelector('[name=item').value;            // 'this' HERE IS form WE ARE WORKING IN
+    const item = {
+      text,                                                         // ES6 SHORTHAND SO NOT text: text
+      done: false
+    }
+    items.push(item)
+    populateList(items, itemsList)                          // NOTE: EVERY TIME ADD ITEM, WILL RECREATE THE LIST OF ITEMS. THIS IS WHERE React, ETC. WILL BE HELPFUL FOR PERFOMANCE (DIFFING)
+    
+    // localStorage.setItem('items', items)                 // DON'T DO THIS. LOCAL STORAGE STORES KEY/VAL IN STRINGS. SO WHEN PASS OBJECT HERE, WILL CALL IT [object Object] WITH NO ACTUAL OBJECT STORED
+    localStorage.setItem('items', JSON.stringify(items))    // STORE JSON STRING EQUIVALENT
+    localStorage.getItem('items')                           // SHOWS items : [{"text": "fish", "done": false}, {"text": "squid", "done": false}]. LOOKS LIKE OBJECT BUT REALLY IS A STRING
+    JSON.parse(localStorage.getItem('items'))               // TAKES items AND TURNS BACK INTO ARRAY OF OBJECTS
+
+    this.reset()              // THIS IS A FORM ELEMENT SO HAVE reset() METHOD
+  }
+
+  function populateList(plates = [], platesList) {      // DEFAULT [] SO IF HAVE NO ITEMS, WILL JUST ITERATE OVER EMPTY ARRAY && RETURN NOTHING
+    platesList.innerHTML = plates.map((plate, i) => {   // plates IS ITEM LIST. platesList IS HTML DESTINATION FOR ITEMS. CAN REUSE THIS FUNCTION
+      return `
+        <li>
+          <input type="checkbox" data-index=${i} id="item${i}" ${plate.done ? 'checked' : ""}/>  
+          <label for="item${i}">${plate.text}</label>    
+        </li>`
+    }).join("")                                         // BC WE WANT TO RETURN A STRING. NOT AN ARRAY FROM map()                                                   
+  }                                                     // "id" AND "for" IN input/label DO SAME THING. WHEN label IS CLICKED, IS LINKED TO input AND WILL CHECK ITSELF
+                                                        // ANOTHER THING TO NOTE ON 'checked' IS THAT SETTING IT TO ANYTHING (EVEN false) WILL CHECK IT. SO DO TERNARY
+
+  function toggleDone(e) {
+    if (!e.target.matches('input')) return;             // SKIP UNLESS IT'S AN INPUT. BC WE HAVE NESTED input WITH label SO IS TRIGGERING BOTH
+
+    // console.log(e.target)
+    const el = e.target
+    // console.log(el.dataset.index)
+    const index = el.dataset.index;
+    items[index].done = !items[index].done                // FLIP-FLOPS BETWEEN true/false
+    localStorage.setItem('items', JSON.stringify(items)); // FIND ITEM IN localStorage && SET PROPERTY
+    populateList(items, itemsList)                        // CHANGE VISUALIZATION
+  }
+
+  function toggleAll(e) {
+    items.map(item => (item.done = true))
+    localStorage.setItem('items', JSON.stringify(items)); 
+    // console.log(items)
+    populateList(items, itemsList)
+  }
+
+  function clearAll(e) {
+    items.map(item => (item.done = false))
+    localStorage.setItem('items', JSON.stringify(items));
+    // console.log(items)
+    populateList(items, itemsList)   
+  }
+
+  addItems.addEventListener('submit', addItem)  // LISTEN FOR 'submit' BC 'COVERS ALL BASES'
+  
+  // DON'T DO THIS: 
+    // const checkBoxes = document.querySelectorAll('input')
+    // checkBoxes.forEach(input => input.addEventListener('click', () => alert('hi')))
+      // ITEMS CREATED AFTER EVENT DELEGATION WILL NOT RESPOND SO THINK OF ELEMENT THAT WILL BE ON PAGE BEFORE/AFTER ITEM IS CREATED.
+      // LOL. THINK RESPONSIBLE PARENT // NEGLIGENT CHILD THAT DOESN'T KNOW WHAT TO DO WITH CLICK
+      // PLEASE PASS CLICK ONTO CHILD && TELL THEM TO HANDLE
+
+  itemsList.addEventListener('click', toggleDone)
+  clearButton.addEventListener('click', clearAll)
+  selectAllButton.addEventListener('click', toggleAll)
+  unselectAllButton.addEventListener('click', clearAll)
+
+  populateList(items, itemsList)                // USE LOCAL STORAGE SO EVEN IF RELOAD PAGE, ITEMS ARE PERSISTED
+                                                // LOCAL STORAGE: OBJECT IN BROWSER HAS STORAGE. CAN SAVE TEXT TO BROWSER
+                                                // EVERY SITE, EVERY BROWSER, EVERY COMPUTER HAS LOCAL STORAGE
 </script>
 
 
